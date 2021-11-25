@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Sleep Tracker </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="background-image">
+  <ion-item>
+    <ion-select [(ngModel)]="viewOption" interface="popover">
+      <ion-select-option value="1">View Overnight Sleep</ion-select-option>
+      <ion-select-option value="2">View Sleepiness</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <div *ngIf="viewOption==='1'">
+    <ion-card *ngFor="let s of sortedSleep()">
+      <ion-card-header>
+        <ion-icon name="moon"></ion-icon>
+        <ion-card-title>{{s.dateString()}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>{{s.summaryString()}} </ion-card-content>
+    </ion-card>
+  </div>
+  <div *ngIf="viewOption==='2'">
+    <ion-card *ngFor="let s of sortedSleepiness()">
+      <ion-card-header>
+        <ion-icon name="sunny"></ion-icon>
+        <ion-card-title>{{s.dateString()}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>{{s.summaryString()}}</ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,0 +1,33 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Sleep Tracker </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Average Sleep</ion-card-subtitle>
+      <ion-card-title>{{averageSleep}}</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Nights Tracked</ion-card-subtitle>
+      <ion-card-title>{{nightsTracked}} Nights</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Longest Sleep</ion-card-subtitle>
+      <ion-card-title>{{longestSleep}}</ion-card-title>
+      <ion-card-subtitle>{{longestSleepDate}}</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Shortest Sleep</ion-card-subtitle>
+      <ion-card-title>{{shortestSleep}}</ion-card-title>
+      <ion-card-subtitle>{{shortestSleepDate}}</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+</ion-content>

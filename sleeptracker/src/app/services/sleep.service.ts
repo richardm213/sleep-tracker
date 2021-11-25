@@ -2,36 +2,83 @@ import { Injectable } from '@angular/core';
 import { SleepData } from '../data/sleep-data';
 import { OvernightSleepData } from '../data/overnight-sleep-data';
 import { StanfordSleepinessData } from '../data/stanford-sleepiness-data';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SleepService {
-	private static LoadDefaultData:boolean = true;
-	public static AllSleepData:SleepData[] = [];
-	public static AllOvernightData:OvernightSleepData[] = [];
-	public static AllSleepinessData:StanfordSleepinessData[] = [];
+  public static AllSleepData: SleepData[] = [];
+  public static AllOvernightData: OvernightSleepData[] = [];
+  public static AllSleepinessData: StanfordSleepinessData[] = [];
+  public static AverageSleepSum: number = 0;
+  public static NightsTracked: number = 0;
+  public static LongestSleep: OvernightSleepData = null;
+  public static ShortestSleep: OvernightSleepData = null;
 
-	constructor() {
-		if(SleepService.LoadDefaultData) {
-			this.addDefaultData();
-		SleepService.LoadDefaultData = false;
-	}
-	}
+  constructor(private storage: Storage) {
+    storage.create();
+    this.loadStorageData();
+  }
 
-	private addDefaultData() {
-		this.logOvernightData(new OvernightSleepData(new Date('February 18, 2021 01:03:00'), new Date('February 18, 2021 09:25:00')));
-		this.logSleepinessData(new StanfordSleepinessData(4, new Date('February 19, 2021 14:38:00')));
-		this.logOvernightData(new OvernightSleepData(new Date('February 20, 2021 23:11:00'), new Date('February 21, 2021 08:03:00')));
-	}
+  private loadStorageData() {
+    this.storage.forEach((data) => {
+      if (data.hasOwnProperty('sleepStart')) {
+        var d = new OvernightSleepData(
+          data.sleepStart,
+          data.sleepEnd,
+          data.loggedAt
+        );
+        SleepService.AllOvernightData.push(d);
+        SleepService.NightsTracked += 1;
+        SleepService.AverageSleepSum += d.getSleepDifference();
+        if (
+          SleepService.LongestSleep == null ||
+          d.getSleepDifference() >
+            SleepService.LongestSleep.getSleepDifference()
+        ) {
+          SleepService.LongestSleep = d;
+        }
+        if (
+          SleepService.ShortestSleep == null ||
+          d.getSleepDifference() <
+            SleepService.ShortestSleep.getSleepDifference()
+        ) {
+          SleepService.ShortestSleep = d;
+        }
+      } else {
+        SleepService.AllSleepinessData.push(
+          new StanfordSleepinessData(data.loggedValue, data.loggedAt)
+        );
+      }
+    });
+  }
 
-	public logOvernightData(sleepData:OvernightSleepData) {
-		SleepService.AllSleepData.push(sleepData);
-		SleepService.AllOvernightData.push(sleepData);
-	}
+  public logOvernightData(sleepData: OvernightSleepData) {
+    SleepService.AllSleepData.push(sleepData);
+    SleepService.AllOvernightData.push(sleepData);
+    this.storage.set(sleepData.id, sleepData);
+    SleepService.NightsTracked += 1;
+    SleepService.AverageSleepSum += sleepData.getSleepDifference();
+    if (
+      SleepService.LongestSleep == null ||
+      sleepData.getSleepDifference() >
+        SleepService.LongestSleep.getSleepDifference()
+    ) {
+      SleepService.LongestSleep = sleepData;
+    }
+    if (
+      SleepService.ShortestSleep == null ||
+      sleepData.getSleepDifference() <
+        SleepService.ShortestSleep.getSleepDifference()
+    ) {
+      SleepService.ShortestSleep = sleepData;
+    }
+  }
 
-	public logSleepinessData(sleepData:StanfordSleepinessData) {
-		SleepService.AllSleepData.push(sleepData);
-		SleepService.AllSleepinessData.push(sleepData);
-	}
+  public logSleepinessData(sleepData: StanfordSleepinessData) {
+    SleepService.AllSleepData.push(sleepData);
+    SleepService.AllSleepinessData.push(sleepData);
+    this.storage.set(sleepData.id, sleepData);
+  }
 }

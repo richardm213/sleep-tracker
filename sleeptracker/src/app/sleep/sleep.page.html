@@ -1,0 +1,143 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Sleep Tracker </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <div id="container">
+    <div>Welcome Back!</div>
+    <br />
+    <div id="text">{{time}}</div>
+    <br />
+    <div>{{day}}</div>
+    <br />
+    <div id="text2">
+      <ion-select [(ngModel)]="viewOption" interface="action-sheet">
+        <ion-select-option value="1">Log Overnight Sleep</ion-select-option>
+        <ion-select-option value="2">Log Sleepiness</ion-select-option>
+      </ion-select>
+    </div>
+    <ion-grid>
+      <div *ngIf="viewOption==='1'">
+        <ion-row>
+          <ion-col>
+            <ion-label>Fell Asleep:</ion-label>
+          </ion-col>
+          <ion-col><ion-label>Woke Up:</ion-label></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-chip>
+              <ion-datetime
+                [(ngModel)]="fellAsleepTime"
+                displayFormat="MMM DD YYYY"
+              >
+              </ion-datetime>
+            </ion-chip>
+          </ion-col>
+          <ion-col>
+            <ion-chip>
+              <ion-datetime
+                [(ngModel)]="wokeUpTime"
+                displayFormat="MMM DD YYYY"
+              >
+              </ion-datetime>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-chip>
+              <ion-datetime
+                [(ngModel)]="fellAsleepTime"
+                displayFormat="hh:mm A"
+              >
+              </ion-datetime>
+            </ion-chip>
+          </ion-col>
+          <ion-col>
+            <ion-chip>
+              <ion-datetime [(ngModel)]="wokeUpTime" displayFormat="hh:mm A">
+              </ion-datetime>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-align-self-center">
+            <ion-button (click)="addSleepData()">Record</ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngIf="viewOption==='2'">
+        <ion-row>
+          <ion-col class="ion-align-self-center">
+            <ion-label>Sleepiness Time:</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-align-self-center">
+            <ion-chip>
+              <ion-datetime
+                [(ngModel)]="sleepinessTime"
+                displayFormat="MMM DD YYYY"
+              >
+              </ion-datetime>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-align-self-center">
+            <ion-chip>
+              <ion-datetime
+                [(ngModel)]="sleepinessTime"
+                displayFormat="hh:mm A"
+              >
+              </ion-datetime>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-align-self-center">
+            <ion-chip>
+              <ion-select
+                interface="action-sheet"
+                [selectedText]="sleepinessText"
+                [(ngModel)]="sleepiness"
+                (ionChange)="updateSleepinessText()"
+              >
+                <ion-select-option value="1">
+                  1: Feeling active, vital, alert, or wide awake
+                </ion-select-option>
+                <ion-select-option value="2">
+                  2: Functioning at high levels, but not at peak; able to
+                  concentrate
+                </ion-select-option>
+                <ion-select-option value="3">
+                  3: Awake, but relaxed; responsive but not fully alert
+                </ion-select-option>
+                <ion-select-option value="4">
+                  4: Somewhat foggy, let down
+                </ion-select-option>
+                <ion-select-option value="5">
+                  5: Foggy; losing interest in remaining awake; slowed down
+                </ion-select-option>
+                <ion-select-option value="6">
+                  6: Sleepy, woozy, fighting sleep; prefer to lie down
+                </ion-select-option>
+                <ion-select-option value="7">
+                  7: No longer fighting sleep, sleep onset soon; having
+                  dream-like thoughts
+                </ion-select-option>
+              </ion-select>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-align-self-center">
+            <ion-button (click)="addSleepinessData()">Record</ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-grid>
+  </div>
+</ion-content>
